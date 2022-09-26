@@ -43,7 +43,7 @@ public class Bullet : MonoBehaviour
         }
 */
 
-        if (col.gameObject.TryGetComponent(out Enemy enemy))
+        if (col.gameObject.TryGetComponent(out PatrollingEnemy enemy))
         {
             enemy.Health -= damage;
 

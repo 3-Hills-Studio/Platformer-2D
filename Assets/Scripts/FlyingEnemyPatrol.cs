@@ -75,7 +75,7 @@ public class FlyingEnemyPatrol : Patrol
         
     }
 
-
+/*
     public override void OnDrawGizmos()
     {
         base.OnDrawGizmos();
@@ -85,4 +85,5 @@ public class FlyingEnemyPatrol : Patrol
         Gizmos.DrawSphere(transform.position,detectionRadius);
         
     }
+    */
 }

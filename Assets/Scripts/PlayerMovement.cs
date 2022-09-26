@@ -19,10 +19,6 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private Animator animator;
 
-    [SerializeField] private GameObject bulletPrefab;
-
-    [SerializeField] private GameObject firePoint;
-   
     private float dirX = 0;
     private float dirY = 0;
 
@@ -48,21 +44,6 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 startingScale;
     private Vector2 modifiedScale;
 
-    [SerializeField] private float bulletForce;
-
-    [SerializeField] private Transform shootingPoint;
-
-    private Vector2 trajDir;
-
-    [SerializeField] private GameObject lineDotPrefab;
-
-    private List<GameObject> trajectoryPoints = new List<GameObject>();
-
-    [SerializeField] private int pointsCount;
-
-    [SerializeField] private float dotSpacing;
-
-
     private void Start()
     {
         _startingGravitySacale = rb2D.gravityScale;
@@ -70,41 +51,15 @@ public class PlayerMovement : MonoBehaviour
 
         startingScale = transform.localScale;
         modifiedScale = startingScale;
-/*
-        for (int i = 0; i < pointsCount; i++)
-        {
-            GameObject gob = Instantiate(lineDotPrefab,shootingPoint.transform.position,shootingPoint.transform.rotation);
-            trajectoryPoints.Add(gob);
-        }
-        */
     }
 
     private void Update()
     {
         Jump();
         FlipSprite();
-        AimWhereMouseIs();
-        Fire();
         AnimateJump();
         ClimbAnimation();
         FreezeClimbingAnimation();
-        //UpdateTrajPointsPositions();
-    }
-
-    private void UpdateTrajPointsPositions()
-    {
-        for (int i = 0; i < trajectoryPoints.Count; i++)
-        {
-            trajectoryPoints[i].transform.position = TrajPointPos(i * dotSpacing);
-        }
-    }
-
-    public Vector2 TrajPointPos(float t)
-    {
-        Vector2 pos = (Vector2) shootingPoint.transform.position + (trajDir.normalized * bulletForce * t) +
-                      0.5f * Physics2D.gravity * (t * t);
-
-        return pos;
     }
 
     private void FixedUpdate()
@@ -125,9 +80,7 @@ public class PlayerMovement : MonoBehaviour
                 playerNewScale.x *= Mathf.Sign(rb2D.velocity.x);
                 transform.localScale = playerNewScale;
             }
-            
         }
-
     }
 
     private void OnCollisionEnter2D(Collision2D col)
@@ -218,7 +171,6 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool("isInAir",true);
             return;
         }
-        
         animator.SetBool("isInAir",false);
     }
 
@@ -247,33 +199,7 @@ public class PlayerMovement : MonoBehaviour
             transform.localScale = new Vector2(scaleX,transform.localScale.y);
         }
     }
-
-    public void AimWhereMouseIs()
-    {
-        Vector2 pointA = firePoint.transform.position;
-        Vector2 pointB = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        
-        trajDir = pointB - pointA;
-        
-        firePoint.transform.right = trajDir;
-    }
-
-    private void Fire()
-    {
-        if (Input.GetKey(KeyCode.Mouse0) && Time.time > nextFire)
-        {
-            nextFire = Time.time + fireRate;
-            
-            animator.SetTrigger("fire");
-            
-            GameObject bulletObj = Instantiate(bulletPrefab, shootingPoint.position,firePoint.transform.rotation);
-
-            var bullet = bulletObj.GetComponent<Bullet>();
-            
-            bullet.rb2D.velocity = firePoint.transform.right * bulletForce;
-        }
-    }
-
+    
     private void Climb()
     {
 

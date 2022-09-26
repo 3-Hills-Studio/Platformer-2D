@@ -31,8 +31,14 @@ public class Player : MonoBehaviour
         if (col.transform.TryGetComponent(out IDestructible destructible))
         {
             destructible.DestroyAndPlayFx();
-            return;
         }
-        
+    }
+
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.transform.TryGetComponent(out ICollectable collectable))
+        {
+            collectable.Collected(this);
+        }
     }
 }

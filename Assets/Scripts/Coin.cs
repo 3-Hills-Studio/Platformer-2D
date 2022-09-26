@@ -4,17 +4,13 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class Coin : MonoBehaviour
+public class Coin : MonoBehaviour, ICollectable
 {
     [SerializeField] private int amount;
 
-
-    private void OnTriggerEnter2D(Collider2D col)
+    public void Collected(Player player)
     {
-        if (col.gameObject.CompareTag("Player"))
-        {
-            GameController.singleton.ModifyCoins(amount);
-            Destroy(gameObject);
-        } 
+        GameController.singleton.ModifyCoins(amount);
+        Destroy(gameObject);
     }
 }

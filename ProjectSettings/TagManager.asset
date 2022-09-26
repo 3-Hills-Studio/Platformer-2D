@@ -60,3 +60,6 @@ TagManager:
   - name: EnemyEnviroment
     uniqueID: 170614697
     locked: 0
+  - name: Collectible
+    uniqueID: 180622391
+    locked: 0

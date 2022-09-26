@@ -4,23 +4,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class Enemy : MonoBehaviour
+public class PatrollingEnemy : EnemyBase
 {
-    [field: SerializeField] public int Health { get; set; }
-    [field: SerializeField] public int Damage { get; set; }
 
     [SerializeField] private CircleCollider2D circleCollider2D;
-    
-    [SerializeField] private BoxCollider2D wallCheckCollider;
-
-    [SerializeField] private LayerMask groundLayer;
-    
-    [SerializeField] private float moveSpeed;
 
     [SerializeField] private Vector2 pushForce;
-    
 
-    public int MaxHealth { get; private set; }
+    [SerializeField] private GameObject deathVFX;
+    
 
     private void Start()
     {
@@ -44,13 +36,20 @@ public class Enemy : MonoBehaviour
         {
             if (col.transform.position.y - transform.position.y >= circleCollider2D.bounds.size.y / 2)
             {
-                Destroy(gameObject);
+                Die();
                 return;
             }
 
-            health.ModifyHealth(-Damage);
+            health.ModifyHealth(-MeleeDamage);
             
             health.GetComponent<Rigidbody2D>().AddForce(new Vector2(transform.localScale.x * pushForce.x,pushForce.y),ForceMode2D.Impulse);
         }
+    }
+
+    public override void Die()
+    {
+        GameObject gob = Instantiate(deathVFX);
+        gob.transform.position = transform.position;
+        Destroy(gameObject);
     }
 }
