@@ -13,4 +13,12 @@ public class Coin : BaseCollectable
         GameController.singleton.ModifyCoins(amount);
         Destroy(gameObject);
     }
+
+    public override void StoreInInventory()
+    {
+    }
+
+    public override void Use()
+    {
+    }
 }

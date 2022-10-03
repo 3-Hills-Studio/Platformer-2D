@@ -147,4 +147,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Data>k__BackingField: {fileID: 11400000, guid: 22d187355db8279478a6d87927c3bf1d, type: 2}
+  <Player>k__BackingField: {fileID: 0}
+  <ItemIconSprite>k__BackingField: {fileID: 1709705180, guid: 2d647596ba2fb1b4381bff493db9a2f1, type: 3}
   <HealthAmount>k__BackingField: 300

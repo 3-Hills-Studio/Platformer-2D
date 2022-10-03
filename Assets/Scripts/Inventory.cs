@@ -19,9 +19,33 @@ public class Inventory : MonoBehaviour
     
     [field: SerializeField] public float inventoryAnimationDuration{ get; private set; }
 
+    [field: SerializeField] public List<InventorySlot> InventorySlots { get; set; }
+    
+    [field: SerializeField] public InventorySlot MousePickedUpSlot { get; set; }
+    
+    [field: SerializeField] public InventorySlot MouseHoveredSlot { get; set; }
+    
+    [field: SerializeField] public Image DragNDropIconImageHolder { get; set; }
 
     private float _defaultAnchoredPositionX = 0;
     private float _openAnchoredPositionX = 0;
+
+
+    private void OnEnable()
+    {
+        GamePlayEvents.OnAddCollectable += HandleOnAddCollectable;
+    }
+
+    private void OnDisable()
+    {
+        GamePlayEvents.OnAddCollectable -= HandleOnAddCollectable;
+    }
+
+    //rad sa eventima je observable pattern u programiranju
+    public void HandleOnAddCollectable(BaseCollectable baseCollectable)
+    {
+        AddItemToSlot(baseCollectable);
+    }
 
     private void Start()
     {
@@ -30,9 +54,32 @@ public class Inventory : MonoBehaviour
 
         for (int i = 0; i < InventoryNumberOfItems; i++)
         {
-            Instantiate(InventoryItemPrefab, ContentRect);
+            var gob = Instantiate(InventoryItemPrefab, ContentRect);
+
+            var inventoryItem = gob.GetComponent<InventorySlot>();
+
+            inventoryItem.SlotId = i;
+            
+            inventoryItem.Inventory = this;
+            
+            InventorySlots.Add(inventoryItem);
         }
-        
+    }
+
+    public void AddItemToSlot(BaseCollectable baseCollectable)
+    {
+        for (int i = 0; i < InventorySlots.Count; i++)
+        {
+            if (InventorySlots[i].Collectable != null) continue;
+
+            InventorySlots[i].Collectable = baseCollectable;
+
+            InventorySlots[i].IconImage.sprite = baseCollectable.ItemIconSprite;
+
+            InventorySlots[i].IconImage.enabled = true;
+            
+            return;
+        }
     }
 
     public void OnClickInventoryButton()

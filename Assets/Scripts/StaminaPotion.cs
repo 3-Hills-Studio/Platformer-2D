@@ -2,10 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HealthPotion : BaseCollectable
+public class StaminaPotion : BaseCollectable
 {
-    [field: SerializeField] public float HealthAmount { get; private set; }
-
+    
     public override void Collected(Player player)
     {
         Player = player;
@@ -20,11 +19,7 @@ public class HealthPotion : BaseCollectable
 
     public override void Use()
     {
-        if (Player.TryGetComponent(out Health health))
-        {
-            health.ModifyHealth(HealthAmount);
-            Destroy(gameObject);
-            Debug.Log("USED HEALTH POTION!");
-        }
+        Debug.Log("USED STAMINA POTION!");
+        Destroy(gameObject);
     }
 }
