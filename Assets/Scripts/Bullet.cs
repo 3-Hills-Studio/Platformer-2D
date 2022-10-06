@@ -29,20 +29,6 @@ public class Bullet : MonoBehaviour
             return;
         }
         
-/*
-        Enemy enemy = col.gameObject.GetComponent<Enemy>();
-        
-        if (enemy != null)
-        {
-            enemy.Health -= damage;
-
-            if (enemy.Health <= 0)
-            {
-                Destroy(enemy.gameObject);
-            }
-        }
-*/
-
         if (col.gameObject.TryGetComponent(out PatrollingEnemy enemy))
         {
             enemy.Health -= damage;

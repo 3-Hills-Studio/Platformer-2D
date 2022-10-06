@@ -12,6 +12,23 @@ public class Player : MonoBehaviour
     
     //todo damage interface za playera 
 
+
+    private void OnEnable()
+    {
+        GamePlayEvents.OnRemoveItemFromInventory += HandleOnRemoveItemFromInventory;
+    }
+
+    private void OnDisable()
+    {
+        GamePlayEvents.OnRemoveItemFromInventory -= HandleOnRemoveItemFromInventory;
+    }
+
+    public void HandleOnRemoveItemFromInventory(BaseCollectable collectable)
+    {
+        collectable.gameObject.SetActive(true);
+        collectable.transform.position = new Vector2((transform.position.x + transform.localScale.x),transform.position.y);
+    }
+
     private void Start()
     {
         GameController.singleton.currentActivePlayer = this;

@@ -352,8 +352,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   animator: {fileID: 5417172259260751425}
-  bulletPrefab: {fileID: 1813052164743556390, guid: 3c27a10eadf53d040ba7c76744b67f9e, type: 3}
-  firePoint: {fileID: 8388048669398731606}
   fireRate: 0.35
   climbingSpeed: 5
   dashSpeed: 400
@@ -361,11 +359,6 @@ MonoBehaviour:
   canUseDash: 1
   dashDuration: 0.3
   dashCoolDown: 1
-  bulletForce: 10
-  shootingPoint: {fileID: 1232909756}
-  lineDotPrefab: {fileID: 4449381325492333984, guid: 6e2e98e7d5165b74e801f3a86bf2b97e, type: 3}
-  pointsCount: 50
-  dotSpacing: 0.1
 --- !u!114 &5417172259260751433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -393,7 +386,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <HealthSlider>k__BackingField: {fileID: 0}
   <MaxHealth>k__BackingField: 500
-  <LerpDuration>k__BackingField: 1
+  <ModifyHealthLerpDuration>k__BackingField: 0.5
+  <HealthRecoveryDuration>k__BackingField: 5
   <CurrentHealth>k__BackingField: 0
 --- !u!114 &1864836115448841157
 MonoBehaviour:
@@ -441,7 +435,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9141675596674840743}
   m_Layer: 6
-  m_Name: Whatever
+  m_Name: FirePoint
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0

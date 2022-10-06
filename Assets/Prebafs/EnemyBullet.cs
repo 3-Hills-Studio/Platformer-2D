@@ -23,31 +23,18 @@ public class EnemyBullet : MonoBehaviour
             return;
         }
         
-/*
-        Enemy enemy = col.gameObject.GetComponent<Enemy>();
-        
-        if (enemy != null)
+        if (col.gameObject.TryGetComponent(out Health playerHealth))
         {
-            enemy.Health -= damage;
+            playerHealth.ModifyHealth(-damage);
 
-            if (enemy.Health <= 0)
+            if (playerHealth.CurrentHealth <= 0)
             {
-                Destroy(enemy.gameObject);
-            }
-        }
-*/
-
-        if (col.gameObject.TryGetComponent(out PatrollingEnemy enemy))
-        {
-            enemy.Health -= damage;
-
-            if (enemy.Health <= 0)
-            {
-                Destroy(enemy.gameObject);
+                Destroy(playerHealth.gameObject);
             }
             
             Destroy(gameObject);
         }
+        
     }
     
     

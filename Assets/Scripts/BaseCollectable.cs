@@ -15,6 +15,4 @@ public abstract class BaseCollectable : MonoBehaviour
     public abstract void StoreInInventory();
     
     public abstract void Use();
-    
-    
 }
