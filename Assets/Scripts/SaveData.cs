@@ -10,4 +10,5 @@ public class SaveData
     public string lastSceneName;
     public float playerPosX;
     public float playerPosY;
+    public float playerHp;
 }

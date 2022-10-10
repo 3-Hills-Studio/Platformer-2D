@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 [System.Serializable]
 public class Player : MonoBehaviour
 {
-    [field: SerializeField] public int Health { get; set; }
+    [field: SerializeField] public Health Health { get; set; }
     
     
     //todo damage interface za playera 
@@ -39,6 +39,8 @@ public class Player : MonoBehaviour
         {
             transform.position = SceneController.Singleton.loadedPlayerPosition;
         }
+
+        Health.SetHealth(SaveDataController.Singleton.loadedSaveData.playerHp);
         
         SaveDataController.Singleton.SaveGame();
     }

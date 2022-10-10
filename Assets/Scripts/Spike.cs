@@ -12,12 +12,7 @@ public class Spike : MonoBehaviour
     {
         if (col.gameObject.TryGetComponent(out Player player))
         {
-            player.Health -= damage;
-
-            if (player.Health <= 0)
-            {
-                Destroy(player.gameObject);
-            }
+            player.Health.ModifyHealth(-99999);
         }
     }
 }

@@ -37,6 +37,7 @@ public class TrajectoryLineView : MonoBehaviour
         
         foreach (var point in trajectoryPoints)
         {
+            if(point == null) continue;
             point.gameObject.SetActive(show);
         }
     }

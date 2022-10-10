@@ -12,7 +12,7 @@ public class SaveDataController : MonoBehaviour
 
     public const string FILE_NAME = "platformer.2d";
 
-    private SaveData loadedSaveData;
+    public SaveData loadedSaveData;
 
     private void Awake()
     {
@@ -104,6 +104,8 @@ public class SaveDataController : MonoBehaviour
         
         saveData.playerPosX = GameController.singleton.currentActivePlayer.transform.position.x;
         saveData.playerPosY = GameController.singleton.currentActivePlayer.transform.position.y;
+
+        saveData.playerHp = GameController.singleton.currentActivePlayer.Health.CurrentHealth;
 
     }
 
