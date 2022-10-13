@@ -5,6 +5,8 @@ using UnityEngine;
 public class HealthBosslvl3 : Health
 {
     
+    [field: SerializeField] public BoxCollider2D OpenDoorsTrigger { get; set; }
+
     protected override void Update()
     {
         return;
@@ -21,6 +23,8 @@ public class HealthBosslvl3 : Health
         if (CurrentHealth <= 0)
         {
             //death fx
+            Debug.Log("enable door");
+            OpenDoorsTrigger.enabled = true;
             Destroy(gameObject);
         }
     }

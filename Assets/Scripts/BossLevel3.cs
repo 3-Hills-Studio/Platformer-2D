@@ -16,28 +16,56 @@ public class BossLevel3 : MonoBehaviour
     
     [field: SerializeField] public Animator Animator { get; set; }
 
+    [field: SerializeField] public Transform AttackPoint { get; set; }
+    
+    [field: SerializeField] public float AttackRadius { get; set; }
+    
+    [field: SerializeField] public LayerMask PlayerLayerMask { get; set; }
+    
     private const string AttackTriggerName = "Attack";
 
     private Player Player => GameController.singleton.currentActivePlayer;
+    
+    
 
+    private bool IsWithinAttackRange =>
+        Vector2.Distance(transform.position, Player.transform.position) <= AttackThreshold;
+    
     private void Update()
     {
 
-        if (Vector2.Distance(transform.position,Player.transform.position) > MoveThreshold) return;
+        if (Math.Abs(Player.transform.position.y - transform.position.y) > 2f || Vector2.Distance(transform.position,Player.transform.position) > MoveThreshold) return;
         
         RotateTowardsPlayer();
-        
-        transform.position = Vector2.MoveTowards(transform.position,new Vector2(Player.transform.position.x,transform.position.y),MoveSpeed * Time.deltaTime);
 
-        if (Mathf.Abs(transform.position.x - Player.transform.position.x) < AttackThreshold)
+        if (!IsWithinAttackRange)
+        {
+            transform.position = Vector2.MoveTowards(transform.position,new Vector2(Player.transform.position.x,transform.position.y),MoveSpeed * Time.deltaTime);
+        }
+        
+        if (IsWithinAttackRange)
         {
             Animator.SetTrigger(AttackTriggerName);
-
-            Debug.Log("BOSS ATTACK");
         }
         
     }
 
+    public bool DamagePlayer()
+    {
+        var rHit = Physics2D.CircleCast(AttackPoint.position, AttackRadius, Vector2.zero, 0, PlayerLayerMask);
+
+        if (rHit)
+        {
+            if (rHit.transform.gameObject.TryGetComponent(out Health health))
+            {
+                health.ModifyHealth(-Damage);
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+    
     private void RotateTowardsPlayer()
     {
         if (transform.position.x < Player.transform.position.x)

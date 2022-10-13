@@ -19,7 +19,6 @@ public class Door : MonoBehaviour
     {
         if (col.gameObject.TryGetComponent(out Player player) && canOpen)
         {
-            canOpen = false;
             transform.DOMove(new Vector3(transform.position.x,transform.position.y + 2),0.5f);
         }
     }
@@ -28,6 +27,7 @@ public class Door : MonoBehaviour
     {
         if (other.gameObject.TryGetComponent(out Player player))
         {
+            canOpen = false;
             transform.DOMove(startingPosition,0.5f);
         }
     }

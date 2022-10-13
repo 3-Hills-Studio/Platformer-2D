@@ -20,6 +20,38 @@ public class Bullet : MonoBehaviour
         transform.rotation = Quaternion.AngleAxis(angle,Vector3.forward);
     }
 
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.CompareTag("Ground"))
+        {
+            Destroy(gameObject);
+            return;
+        }
+        if (col.gameObject.TryGetComponent(out Health bossHealth))
+        {
+            bossHealth.ModifyHealth(-damage);
+
+            if (bossHealth.CurrentHealth <= 0)
+            {
+                Destroy(bossHealth.gameObject);
+            }
+            
+            Destroy(gameObject);
+            return;
+        }
+        
+        if (col.gameObject.TryGetComponent(out PatrollingEnemy enemy))
+        {
+            enemy.Health -= damage;
+
+            if (enemy.Health <= 0)
+            {
+                Destroy(enemy.gameObject);
+            }
+            
+            Destroy(gameObject);
+        }
+    }
 
     private void OnCollisionEnter2D(Collision2D col)
     {

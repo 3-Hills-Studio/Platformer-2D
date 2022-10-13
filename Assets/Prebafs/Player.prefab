@@ -338,7 +338,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 300
-  jumpStrength: 10
+  jumpStrength: 15
   rb2D: {fileID: 5417172259260751428}
   cc2D: {fileID: 5417172259260751429}
   groundCollider: {fileID: 5417172258025638057}
