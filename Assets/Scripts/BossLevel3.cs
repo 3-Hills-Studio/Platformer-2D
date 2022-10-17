@@ -3,13 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BossLevel3 : MonoBehaviour
+public class BossLevel3 : Boss
 {
-
-    [field: SerializeField] public float MoveSpeed { get; set; }
-    
-    [field: SerializeField] public float Damage { get; set; }
-    
     [field: SerializeField] public float MoveThreshold { get; set; }
     
     [field: SerializeField] public float AttackThreshold { get; set; }
@@ -19,14 +14,9 @@ public class BossLevel3 : MonoBehaviour
     [field: SerializeField] public Transform AttackPoint { get; set; }
     
     [field: SerializeField] public float AttackRadius { get; set; }
-    
-    [field: SerializeField] public LayerMask PlayerLayerMask { get; set; }
-    
+
     private const string AttackTriggerName = "Attack";
 
-    private Player Player => GameController.singleton.currentActivePlayer;
-    
-    
 
     private bool IsWithinAttackRange =>
         Vector2.Distance(transform.position, Player.transform.position) <= AttackThreshold;

@@ -7,6 +7,7 @@ public class SpikeBlock : MonoBehaviour
 {
 
     [field: SerializeField] public Vector3 StartPos { get; set; }
+    
     [field: SerializeField] public Vector3 EndPosition { get; set; }
 
     [field: SerializeField] public float FallDuration { get; set; }
