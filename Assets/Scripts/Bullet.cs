@@ -31,11 +31,6 @@ public class Bullet : MonoBehaviour
         {
             bossHealth.ModifyHealth(-damage);
 
-            if (bossHealth.CurrentHealth <= 0)
-            {
-                Destroy(bossHealth.gameObject);
-            }
-            
             Destroy(gameObject);
             return;
         }

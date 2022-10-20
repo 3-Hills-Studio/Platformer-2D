@@ -144,6 +144,7 @@ MonoBehaviour:
   randomEndTime: 3.5
   randomStartValueNumberOfProjectiles: 2
   randomEndValueNumberOfProjectiles: 5
+  damage: 100
 --- !u!1 &8663462462802825649
 GameObject:
   m_ObjectHideFlags: 0
