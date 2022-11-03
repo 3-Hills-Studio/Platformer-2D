@@ -21,10 +21,10 @@ public class BouncyProjectile : MonoBehaviour
     [SerializeField] private int randomStartValueNumberOfProjectiles;
     [SerializeField] private int randomEndValueNumberOfProjectiles;
 
-    [SerializeField] private float damage;
+    [SerializeField] protected float damage;
     
     
-    private IEnumerator Start()
+    protected virtual IEnumerator Start()
     {
         yield return new WaitForSeconds(Random.Range(randomStartTime, randomEndTime));
 
@@ -33,7 +33,7 @@ public class BouncyProjectile : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private void SpawnFire()
+    protected void SpawnFire()
     {
         int numberOfProjectiles =
             Random.Range(randomStartValueNumberOfProjectiles, randomEndValueNumberOfProjectiles + 1);
@@ -55,7 +55,7 @@ public class BouncyProjectile : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D col)
+    protected virtual void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.TryGetComponent(out Health health))
         {
