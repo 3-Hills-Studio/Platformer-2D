@@ -14,6 +14,15 @@ public class BossLevel6Shooting : MonoBehaviour
     
     private Coroutine _shootingCoroutine;
 
+    [SerializeField] private int minCircleShootingProjectiles;
+    [SerializeField] private int maxCircleShootingProjectiles;
+    
+    [SerializeField] private float minCircleShootingProjectilesRadius;
+    [SerializeField] private float maxCircleShootingProjectilesRadius;
+
+    private int NumberOfRandomCircleProjectiles =>
+        Random.Range(minCircleShootingProjectiles, maxCircleShootingProjectiles+1);
+
     public void StartShootingPlayer()
     {
         if (_shootingCoroutine != null) return;
@@ -26,6 +35,7 @@ public class BossLevel6Shooting : MonoBehaviour
         if (_shootingCoroutine == null) return;
         
         StopCoroutine(_shootingCoroutine);
+        _shootingCoroutine = null;
     }
 
     private IEnumerator ShootPlayerInternal()
@@ -44,10 +54,33 @@ public class BossLevel6Shooting : MonoBehaviour
             
             bullet.GetComponent<Rigidbody2D>().velocity = bulletSpeed * playerDir.normalized;
             
+            Debug.Log("bullet velocity = "+ bullet.GetComponent<Rigidbody2D>().velocity);
+            
             yield return new WaitForSeconds(shootPlayerInterval);
             
         }
     }
 
+    public void FireInCircle()
+    {
+        int noOfProjectiles = NumberOfRandomCircleProjectiles;
+        
+        float angleStep = 360f / noOfProjectiles;
+
+        float angle = 0;
+
+        float randomRadius = Random.Range(minCircleShootingProjectilesRadius, maxCircleShootingProjectilesRadius);
+        
+        for (int i = 0; i <= noOfProjectiles; i++)
+        {
+            Vector3 dir = Quaternion.AngleAxis(angle, Vector3.forward) * firePoint.position * randomRadius;
+
+            GameObject bouncyProjectile = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
+
+            bouncyProjectile.GetComponent<Rigidbody2D>().velocity = dir;
+
+            angle += angleStep;
+        }
+    }
 
 }

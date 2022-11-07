@@ -27,6 +27,25 @@ public class BossLvl6 : Boss
     private int RandomIndex => Random.Range(0, walkingPoints.Count);
     private float RandomSpeed => Random.Range(minMoveSpeed, maxMoveSpeed);
     
+    private float RandomPauseForAttack => Random.Range(minPhaseTwoPauseForAttack, maxPhaseTwoPauseForAttack);
+
+    [SerializeField] private Transform pointA;
+    [SerializeField] private Transform pointB;
+
+    private Transform _lastPointDash;
+
+
+    [SerializeField] private float minPhaseTwoPauseForAttack;
+    [SerializeField] private float maxPhaseTwoPauseForAttack;
+
+    [SerializeField] private GameObject stompFirePrefab;
+    
+    [SerializeField] private Transform stompFireYTransform;
+
+    [SerializeField] private int stompAttackCount = 0;
+    [SerializeField] private int maxStompAttackCount = 0;
+    
+    
     public virtual void Start()
     {
         /*
@@ -53,6 +72,9 @@ public class BossLvl6 : Boss
 
             yield return null;
         }
+
+        //StartCoroutine(DashPhaseTwo());
+        StartCoroutine(DashPhaseThree());
     }
 
     private void DetectGround()
@@ -97,5 +119,116 @@ public class BossLvl6 : Boss
 
         }
     }
+
+    public IEnumerator DashPhaseTwo()
+    {
+        _lastPointDash = pointA;
+
+        float dashSpeed = maxMoveSpeed * 2;
+        
+        var target = GetNewTarget();
+
+        float currentTime = Time.time;
+
+        float timeToFireAfter = 1;
+        
+        while (gameObject.activeSelf)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, target,dashSpeed * Time.deltaTime);
+
+            if (Time.time - currentTime > timeToFireAfter)
+            {
+                bossLevel6Shooting.FireInCircle();
+                currentTime = Time.time;
+            }
+            
+            if (Mathf.Abs(target.x - transform.position.x) < Mathf.Epsilon)
+            {
+                target = GetNewTarget();
+                
+                bossLevel6Shooting.StartShootingPlayer();
+                
+                yield return new WaitForSeconds(RandomPauseForAttack);
+                
+                bossLevel6Shooting.StopShootingPlayer();
+            }
+
+            yield return null;
+        }
+    }
     
+    public IEnumerator DashPhaseThree()
+    {
+        _lastPointDash = pointA;
+
+        float dashSpeed = maxMoveSpeed * 2;
+        
+        var target = GetNewTarget();
+
+        float currentTime = Time.time;
+
+        float timeToFireAfter = 1;
+        
+        while (gameObject.activeSelf)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, target,dashSpeed * Time.deltaTime);
+            
+            if (Mathf.Abs(target.x - transform.position.x) < Mathf.Epsilon)
+            {
+                target = GetNewTarget();
+            }
+            
+            if (Time.time - currentTime > timeToFireAfter + 2)
+            {
+                StompAttack();
+                currentTime = Time.time;
+                yield return new WaitForSeconds(2);
+            }
+           
+            yield return null;
+        }
+    }
+
+    private void StompAttack()
+    {
+        
+        Vector2 playerPosition = GameController.singleton.currentActivePlayer.transform.position;
+
+        playerPosition.y = stompFireYTransform.position.y;
+
+        stompAttackCount += 1;
+        
+        for (int i = 0; i < stompAttackCount; i++)
+        {
+            if (i == 0)
+            {
+                Instantiate(stompFirePrefab, playerPosition, Quaternion.identity);
+                continue;
+            }
+
+            playerPosition.x = Random.Range(pointA.position.x, pointB.position.x);
+            
+            Instantiate(stompFirePrefab, playerPosition, Quaternion.identity);
+        }
+
+        if (stompAttackCount > maxStompAttackCount)
+        {
+            stompAttackCount = 0;
+        }
+
+    }
+
+    private Vector2 GetNewTarget()
+    {
+        if (_lastPointDash != null && _lastPointDash == pointA)
+        {
+            _lastPointDash = pointB;
+            
+            return _lastPointDash.position;
+        }
+        _lastPointDash = pointA;
+        
+        return _lastPointDash.position;
+    }
+
 }
