@@ -1,6 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
+
+public enum BossPhases
+{
+    Phase1,
+    Phase2,
+    Phase3
+}
 
 public class BossLvl6 : Boss
 {
@@ -44,22 +53,41 @@ public class BossLvl6 : Boss
 
     [SerializeField] private int stompAttackCount = 0;
     [SerializeField] private int maxStompAttackCount = 0;
+
+    [SerializeField] private BossPhases currentBossPhase;
+
+    [SerializeField] private BossLevel6Health bossLevel6Health;
     
     
     public virtual void Start()
     {
-        /*
         transform.position = walkingPoints[RandomIndex].position;
         currentIndex = RandomIndex;
         StartPatrol();
         bossLevel6Shooting.StartShootingPlayer();
-        */
+       
 
         //faza 2
-        DetectGround();
+        //DetectGround();
         //lerpuj na taj ground
         //pocni sa loopom na fazu 2 
 
+    }
+
+    private void Update()
+    {
+        if (currentBossPhase == BossPhases.Phase1 && bossLevel6Health.CurrentHealth < 6500)
+        {
+            currentBossPhase = BossPhases.Phase2;
+            DetectGround();
+            return;
+        }
+
+        if (currentBossPhase == BossPhases.Phase2 && bossLevel6Health.CurrentHealth < 4000)
+        {
+            currentBossPhase = BossPhases.Phase3;
+            StartCoroutine(DashPhaseThree());
+        }
     }
 
     private IEnumerator LerpToGround()
@@ -73,8 +101,8 @@ public class BossLvl6 : Boss
             yield return null;
         }
 
-        //StartCoroutine(DashPhaseTwo());
-        StartCoroutine(DashPhaseThree());
+        StartCoroutine(DashPhaseTwo());
+        //StartCoroutine(DashPhaseThree());
     }
 
     private void DetectGround()

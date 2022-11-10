@@ -30,7 +30,6 @@ public class Bullet : MonoBehaviour
         if (col.gameObject.TryGetComponent(out Health bossHealth))
         {
             bossHealth.ModifyHealth(-damage);
-
             Destroy(gameObject);
             return;
         }

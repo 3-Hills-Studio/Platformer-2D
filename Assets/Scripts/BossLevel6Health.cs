@@ -16,11 +16,17 @@ public class BossLevel6Health : Health
 
         HealthSlider.value = CurrentHealth / MaxHealth;
         
+        Debug.Log($"Current health: {CurrentHealth}, max health: {MaxHealth}");
+        
         if (CurrentHealth <= 0)
         {
             healthCanvas.gameObject.SetActive(false);
-
+            Destroy(gameObject);
             //deathFx.Play();
         }
+    }
+
+    protected override void Update()
+    {
     }
 }

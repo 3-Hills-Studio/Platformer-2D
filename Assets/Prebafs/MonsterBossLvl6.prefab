@@ -5821,6 +5821,8 @@ MonoBehaviour:
   stompFireYTransform: {fileID: 0}
   stompAttackCount: 0
   maxStompAttackCount: 8
+  currentBossPhase: 0
+  bossLevel6Health: {fileID: 5998575730001764189}
 --- !u!114 &7635087578214750841
 MonoBehaviour:
   m_ObjectHideFlags: 0

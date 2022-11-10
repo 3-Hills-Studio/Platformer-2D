@@ -50,9 +50,13 @@ public class BossLevel6Shooting : MonoBehaviour
 
             GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
 
-            Vector2 playerDir = GameController.singleton.currentActivePlayer.transform.position - transform.position;
+            Vector2 playerPos = GameController.singleton.currentActivePlayer.transform.position;
             
-            bullet.GetComponent<Rigidbody2D>().velocity = bulletSpeed * playerDir.normalized;
+            Vector2 playerDir = (playerPos - (Vector2)transform.position);
+
+            firePoint.LookAt(playerPos);
+            
+            bullet.GetComponent<Rigidbody2D>().velocity = firePoint.forward * bulletSpeed;
             
             Debug.Log("bullet velocity = "+ bullet.GetComponent<Rigidbody2D>().velocity);
             
