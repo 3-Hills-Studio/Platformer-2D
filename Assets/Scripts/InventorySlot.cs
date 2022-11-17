@@ -35,7 +35,16 @@ public class InventorySlot : MonoBehaviour,IPointerEnterHandler,IPointerExitHand
         _bgHoveredColor = new Color(_bgDefaultColor.r, _bgDefaultColor.g, _bgDefaultColor.b, 1);
     }
 
-
+/*
+    private void Update()
+    {
+        if (Input.touchCount <= 0) return;
+        
+        BackgroundImage.color = _bgHoveredColor;
+        Inventory.MouseHoveredSlot = this;
+        
+    }
+*/
     public void OnPointerEnter(PointerEventData eventData)
     {
         BackgroundImage.color = _bgHoveredColor;
@@ -52,6 +61,9 @@ public class InventorySlot : MonoBehaviour,IPointerEnterHandler,IPointerExitHand
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+#if UNITY_ANDROID
+        Inventory.MouseHoveredSlot = this;
+#endif
         Inventory.MousePickedUpSlot = this;
 
         IconImage.enabled = false;
@@ -62,7 +74,20 @@ public class InventorySlot : MonoBehaviour,IPointerEnterHandler,IPointerExitHand
 
     public void OnDrag(PointerEventData eventData)
     {
+#if UNITY_STANDALONE_WIN
         Inventory.DragNDropIconImageHolder.transform.position = Input.mousePosition;
+#elif UNITY_ANDROID
+        
+        Debug.Log("android on drag event");
+        
+        if (Input.touchCount <= 0) return;
+        
+        Inventory.MouseHoveredSlot = this;
+
+        Vector2 touchPosition = Input.GetTouch(0).position;
+        
+        Inventory.DragNDropIconImageHolder.transform.position = touchPosition;
+#endif
 /*
         if (Inventory.MouseHoveredSlot != null)
         {
@@ -73,7 +98,9 @@ public class InventorySlot : MonoBehaviour,IPointerEnterHandler,IPointerExitHand
 
     public void OnEndDrag(PointerEventData eventData)
     {
-
+#if UNITY_ANDROID
+        Inventory.MouseHoveredSlot = null;
+#endif
         if (EventSystem.current.IsPointerOverGameObject() == false)
         {
             GamePlayEvents.RaiseOnRemoveItemFromInventory(Collectable);

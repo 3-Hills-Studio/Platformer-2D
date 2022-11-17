@@ -108,15 +108,25 @@ public class PlayerMovement : MonoBehaviour
     private void Move()
     {
         if (isDashing) return;
+
+#if UNITY_ANDROID
         
+        AnimateMovement();
+
+        Vector2 velocity = new Vector2(MobileControls.GetXDirection() * moveSpeed * Time.fixedDeltaTime, rb2D.velocity.y);
+            
+        rb2D.velocity = velocity;
+
+#elif UNITY_STANDALONE_WIN
         dirX = Input.GetAxis("Horizontal");
         dirY = Input.GetAxis("Vertical");
-
+       
         AnimateMovement();
         
         Vector2 velocity = new Vector2(dirX * moveSpeed * Time.fixedDeltaTime, rb2D.velocity.y);
 
         rb2D.velocity = velocity;
+#endif
     }
 
     private void Dash()
@@ -155,6 +165,19 @@ public class PlayerMovement : MonoBehaviour
 
     private void Jump()
     {
+#if UNITY_ANDROID
+        if (MobileControls.GetJumpDirection() > 0 && groundCollider.IsTouchingLayers(groundLayer))
+        {
+            MobileControls.ResetJump();
+            
+            Vector2 velocity = new Vector2(0, jumpStrength);
+
+            rb2D.velocity += velocity;
+            return;
+        }
+        MobileControls.ResetJump();
+        
+#elif UNITY_STANDALONE_WIN
         if (Input.GetButtonDown("Jump") && groundCollider.IsTouchingLayers(groundLayer))
         {
             Vector2 velocity = new Vector2(0, jumpStrength);
@@ -162,6 +185,8 @@ public class PlayerMovement : MonoBehaviour
             rb2D.velocity += velocity;
             return;
         }
+#endif
+        
     }
 
     private void AnimateJump()

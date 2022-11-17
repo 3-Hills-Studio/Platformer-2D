@@ -23,6 +23,8 @@ public class PlayerShooting : MonoBehaviour
     [field: SerializeField] public Vector2 TrajDir { get; private set; }
 
 
+    [field: SerializeField] public TrajectoryLineView TrajectoryLineView { get; set; }
+
     private void Update()
     {
         AimWhereMouseIs();
@@ -47,11 +49,37 @@ public class PlayerShooting : MonoBehaviour
     
     public void AimWhereMouseIs()
     {
+#if UNITY_STANDALONE_WIN
+        
         Vector2 pointA = firePoint.transform.position;
         Vector2 pointB = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         
         TrajDir = pointB - pointA;
         
         firePoint.transform.right = TrajDir * transform.localScale.x;
+        
+#elif UNITY_ANDROID || UNITY_EDITOR
+
+        if (Input.touchCount > 0 && EventSystem.current.IsPointerOverGameObject() == false)
+        {
+            TrajectoryLineView.ShowPoints(true);
+            
+            Touch touch = Input.GetTouch(0);
+
+            Vector2 touchPosition = touch.position;
+            
+            Vector2 pointA = firePoint.transform.position;
+        
+            Vector2 pointB = Camera.main.ScreenToWorldPoint(touchPosition);
+        
+            TrajDir = pointB - pointA;
+        
+            firePoint.transform.right = TrajDir * transform.localScale.x;
+            return;
+        }
+     
+        TrajectoryLineView.ShowPoints(false);
+        
+#endif
     }
 }
